@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About me</title>
+    <style>
+        body {
+            font-family: 'Bahnschrift', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+.profile-box {
+    background-color: rgba(20, 20, 20, 0.85); 
+    color: #9370DB;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 10px;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+    z-index: 1; 
+    position: relative;
+}
+        
+        .profile-box img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        .profile-box h2 {
+            margin: 0.5rem 0;
+        }
+        .profile-box h3 {
+            margin: 1rem 0 0.5rem;
+            text-align: left;
+        }
+        .profile-box p, .profile-box ul {
+            text-align: left;
+            margin: 0.5rem 0;
+        }
+        .profile-box ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .profile-box ul li a {
+            color: #9370DB; 
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .profile-box ul li a:hover {
+            color: #FFB6C1; 
+        }
+        .impressum {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: #9370DB;
+        }
+        .impressum a {
+            color: #9370DB;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .impressum a:hover {
+            color: #FFB6C1;
+        }
+        .impressum i {
+            margin-right: 6px;
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+        .divider {
+            border: 0;
+            height: 1px;
+            background: #FFFFE0;
+            margin: 2rem 0;
+        }
+
+
+@media (max-width: 1024px) {
+    body {
+        overflow-y: auto;        
+        min-height: 100vh;       
+        height: auto;            
+        display: flex;           
+        flex-direction: column;  
+        justify-content: center; 
+        align-items: center;     
+        padding: 2rem 1rem;     
+    }
+    .profile-box {
+        width: 100%;       
+        max-width: 90%;    
+        margin: 0;      
+    }
+}
+
+    </style>
+</head>
+<body>
+    <canvas id="binaryCanvas"></canvas>
+    <div class="profile-box">
+        <img src="profilpicture.jpg" alt="Profilbild">
+        <h2>♬ 𝑱𝒂𝒚𝒂𝒄𝒆 ♬</h2>
+        
+        <hr class="divider">
+
+        <h3>Who I am?</h3>
+        <p>Im Jay, and I'm currently an Computer Science Assistant</p>
+        
+        <h3>Hobbys</h3>
+        <ul>
+            <li>Playing Instruments</li>
+            <li>Listening to music</li>
+            <li>Programming</li>
+            <li>Skateboarding</li>
+        </ul>
+
+        <h3>Games</h3>
+        <ul>
+            <li><a href="https://www.ea.com/games/skate" target="_blank">Skate</a></li>
+            <li><a href="https://www.minecraft.net/de-de/about-minecraft" target="_blank">Minecraft</a></li>
+            <li><a href="https://store.steampowered.com/app/3527290/PEAK/" target="_blank">Peak</a></li>
+            <li><a href="https://playvalorant.com/de-de/" target="_blank">Valorant</a></li>
+        </ul>
+        
+        <h3>Future plans</h3>
+        <p>I see myself working in the IT industry someday as an IT specialist for system integration or application development.</p>
+
+
+        <hr class="divider">
+
+        <div class="impressum">
+    <a href="https://github.com/j4yac3" target="_blank" title="GitHub">
+        <i class="fab fa-github"></i> Github
+    </a>
+    <a href="https://steamcommunity.com/id/j4y4c3/" target="_blank" title="Steam">
+        <i class="fab fa-steam"></i> Steam
+    </a>
+    <a href="https://de.pinterest.com/jayace_music/" target="_blank" title="Pinterest">
+        <i class="fab fa-pinterest"></i> Pinterest
+    </a>
+</div>
+   </div>
+
+    <script>
+        const canvas = document.getElementById('binaryCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const binary = '01';
+        const fontSize = 16;
+        let columns;
+        let drops = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            columns = Math.floor(canvas.width / fontSize);
+            drops = Array(columns).fill(0);
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#800080';
+            ctx.font = `${fontSize}px 'Bahnschrift', monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = binary[Math.floor(Math.random() * binary.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        function startAnimation() {
+            resizeCanvas();
+            setInterval(draw, 50);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        startAnimation();
+    </script>
+</body>
+</html>
